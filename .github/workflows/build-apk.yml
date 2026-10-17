@@ -1,13 +1,15 @@
 
 name: Build Samiullah Noori APK
 
-on:
+on: 
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-apk.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,9 +20,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Unzip project
+        run: unzip -o Samiullah-Noori-Android-Project.zip
+
       - name: Build APK
         run: |
-          unzip -o Samiullah-Noori-Android-Project.zip
           cd sami-apk-project
           chmod +x gradlew
           ./gradlew assembleDebug
@@ -30,4 +34,3 @@ jobs:
         with:
           name: Samiullah-Noori-APK
           path: sami-apk-project/app/build/outputs/apk/debug/app-debug.apk
-
